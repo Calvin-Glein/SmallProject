@@ -1,0 +1,271 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <title>UI Parser</title>
+
+    <script type="text/javascript" src="C:\Users\Glenn\Desktop\UI Parser\styles\interact.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles\semantic\semantic.css">
+    <script type="text/javascript" src="styles\jquery-3.2.1.min.js"></script>
+
+    <style>
+        #drag {
+            /*       width: 25%;
+            height: 20 rm;
+            min-height: 6.5em;
+            margin: 10%;
+*/
+            /*       background-color: #29e;
+            color: white;*/
+            /*   border-radius: 0.75em;
+            padding: 4%;*/
+            -webkit-transform: translate(0px, 0px);
+            transform: translate(0px, 0px);
+        }
+
+        #drag-me::before {
+            content: "#" attr(id);
+            font-weight: bold;
+        }
+
+    </style>
+
+
+
+</head>
+
+<body>
+    <div class="ui container" style="background-color: white; height: 100%;">
+        <div class="ui grid" style="height: 100%;">
+            <div class="four wide column" style="height: 100%; background-color: white; ">
+                <!-- <h2 class="ui header ">
+                    <i class="cubes icon"></i>
+                    <div class="content">
+                        UI Parser
+                    </div>
+                </h2>
+
+                <div class="ui middle aligned divided list">
+                    <div class="item">
+                        <button id="add_label" class="ui basic button fluid">
+                          <i class="icon add"></i>
+                          Add Label
+                        </button>
+                    </div>
+                    <div class="item">
+                        <button class="ui basic button fluid">
+                          <i class="icon add"></i>
+                          Add TextBox
+                        </button>
+                    </div>
+                    <div class="item">
+                        <button class="ui basic button fluid">
+                          <i class="icon add"></i>
+                          Add Button
+                        </button>
+                    </div>
+                </div>-->
+                <div style="margin-left: 10px;">
+                    <br>
+
+                    <h2 class="ui center aligned icon header">
+                        <i class="cubes icon"></i>
+                        <div class="content">
+                            UI Parser
+                            <div class="sub header">Design layouts on the fly.</div>
+                        </div>
+                    </h2>
+                    <div class="ui vertical menu fluid">
+                        <div class="item">
+                            <div class="ui transparent icon input">
+                                <input id="text_content" type="text" placeholder="Insert text">
+                                <i class="pencil icon"></i>
+                            </div>
+                        </div>
+                        <a class="item" onclick="add_label()">
+ Label
+<div id="label_count" class="ui teal left pointing label">0</div>
+</a>
+                        <a class="item">
+                            Textfield
+                            <div id = "textfield_count" class="ui teal left pointing label">0</div>
+                          </a>
+                        <a class="item">
+                            Button
+                            <div id = "button_count" class="ui teal left pointing label">0</div>
+                          </a>
+
+                    </div>
+
+
+                    <table id="elementTable" class="ui celled table">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Content</th>
+                                <th>X</th>
+                                <th>Y</th>
+                                <th></th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Add an element</td>
+                                <td>Add an element</td>
+                                <td>Add an element</td>
+                                <td>Add an element</td>
+                                <td><button id = "" class="negative ui button">Delete</button>
+</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+
+                </div>
+            </div>
+            <div class="twelve wide column" style="height: 100%; background-color: lightgrey;">
+                <div id="container" style="height: 100%;" style="position: relative">
+                    <div id="start" style="height: 100%;"></div>
+
+
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <script>
+        var indexCounter = 0;
+        var elements = [];
+
+
+
+        function addElementToList(id, type, text) {
+            var elementToAdd = new ElementDataType(id, type, text, "-1", "-1");
+            elements.push(elementToAdd);
+            populateTable();
+        }
+
+        function ElementDataType(id, type, text, xCoordinate, yCoordinate) {
+            this.id = id;
+            this.type = type;
+            this.text = text;
+            this.xCoordinate = xCoordinate;
+            this.yCoordinate = yCoordinate;
+        }
+
+        function populateTable() {
+            var table = document.getElementById("elementTable");
+            $("#elementTable tbody tr").remove()
+            var t = "";
+            for (var i = 0; i < elements.length; i++) {
+                var tr = "<tr>";
+                tr += "<td>" + elements[i].type + "</td>";
+                tr += "<td>" + elements[i].text + "</td>";
+                tr += "<td>" + elements[i].xCoordinate + "</td>";
+                tr += "<td>" + elements[i].yCoordinate + "</td>";
+                tr += "<td><button id = "+elements[i].id +" class='negative ui button fluid'>Delete</button></td>";
+                tr += "</tr>";
+                t += tr;
+            }
+            document.getElementById("elementTable").innerHTML += t;
+        }
+
+        function add_label() {
+            var text = document.getElementById('text_content').value;
+            $("#start").append(' <div id="drag" class="draggable" style = "position: absolute;"> <h1 id = ' + indexCounter + ' class="ui header"> ' + text + '</h1></div>');
+            var currentLabelCount = parseInt($('#label_count').html());
+            label_count.innerHTML = currentLabelCount + 1;
+
+            console.log(indexCounter);
+
+
+            addElementToList(indexCounter, "label", text);
+            indexCounter = indexCounter + 1;
+
+
+
+
+        }
+
+    </script>
+
+    <script>
+        interact('.draggable')
+            .draggable({
+                // enable inertial throwing
+                inertia: true,
+                // keep the element within the area of it's parent
+                restrict: {
+                    restriction: "parent",
+                    endOnly: true,
+                    elementRect: {
+                        top: 0,
+                        left: 0,
+                        bottom: 1,
+                        right: 1
+                    }
+                },
+                // enable autoScroll
+                autoScroll: true,
+
+                // call this function on every dragmove event
+                onmove: dragMoveListener,
+                // call this function on every dragend event
+                onend: function(event) {
+                    var textEl = event.target.querySelector('h1');
+                    var target = event.target
+                    x = (parseFloat(target.getAttribute('data-x')));
+                    y = (parseFloat(target.getAttribute('data-y')));
+
+                    /*       textEl && (textEl.textContent =
+                               textEl.textContent +
+                               (Math.sqrt(event.dx * event.dx +
+                                   event.dy * event.dy) | 0) + 'px' + " x: " + x + " y: " + y);
+                           */
+
+
+                }
+            });
+
+        function dragMoveListener(event) {
+            var target = event.target,
+                // keep the dragged position in the data-x/data-y attributes
+                x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
+                y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+            // translate the element
+            target.style.webkitTransform =
+                target.style.transform =
+                'translate(' + x + 'px, ' + y + 'px)';
+
+            // update the posiion attributes
+            target.setAttribute('data-x', x);
+            target.setAttribute('data-y', y);
+
+            /*get id */
+            /*pass data to populateTable*/
+            var elementDraggedID = parseInt(event.target.querySelector('h1').id);
+            var indexInElementsArray = elements.findIndex(z => z.id == elementDraggedID)
+            elements[indexInElementsArray].xCoordinate = x.toFixed(3);
+            elements[indexInElementsArray].yCoordinate = y.toFixed(3);
+            populateTable();
+
+        }
+
+        // this is used later in the resizing and gesture demos
+        window.dragMoveListener = dragMoveListener;
+
+    </script>
+
+
+
+</body>
+
+</html>
